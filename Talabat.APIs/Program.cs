@@ -20,7 +20,7 @@ namespace Talabat.APIs
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            } 
 
             app.UseHttpsRedirection();
 
