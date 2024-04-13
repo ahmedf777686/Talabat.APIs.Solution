@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Talabat.Repository.Data;
+
 namespace Talabat.APIs
 {
     public class Program
@@ -9,15 +12,22 @@ namespace Talabat.APIs
             // Add services to the container.
 
             builder.Services.AddControllers();
+            
 
-
-
-
+        
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+
+              // OnConfiguring
+            builder.Services.AddDbContext<StoreContext>(Options =>
+            {
+                Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionStrings"));
+            });
+
 
             var app = builder.Build();
 

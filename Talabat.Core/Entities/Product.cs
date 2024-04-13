@@ -13,13 +13,13 @@ namespace Talabat.Core.Entities
         public string PictureUrl { get; set; }
         public decimal Price { get; set;}
 
-        public int Brand { get; set; } //foreign key
-        public ProductBrand BroductBrand { get; set; } // Navigational Property
+        public int BrandId { get; set; } //foreign key
+        public ProductBrand Brand { get; set; } // Navigational Property
 
 
 
-        public int ProductCategoryId { get; set; } //foreign key
-        public ProductCategory BroductCategory { get; set; } // Navigational Property
+        public int CategoryId { get; set; } //foreign key
+        public ProductCategory Category { get; set; } // Navigational Property
 
 
     }
