@@ -40,6 +40,7 @@ namespace Talabat.APIs
             try
             {
                 await _Dbcontext.Database.MigrateAsync();
+               await StoreDbcontextseeding.Seedasync(_Dbcontext);
             }
             catch (Exception ex)
             {
