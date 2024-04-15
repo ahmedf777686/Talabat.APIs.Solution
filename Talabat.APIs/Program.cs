@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Talabat.Core.Entities;
+using Talabat.Core.Repositories;
+using Talabat.Repository;
 using Talabat.Repository.Data;
 
 namespace Talabat.APIs
@@ -29,10 +32,16 @@ namespace Talabat.APIs
                 Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionStrings"));
             });
 
+            //builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
+            //builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepository<ProductBrand>>();
+            //builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
+            //// 
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion
 
             var app = builder.Build();
 
+            #region Update database
             using var Scope = app.Services.CreateScope();
             var services = Scope.ServiceProvider;
             var _Dbcontext = services.GetRequiredService<StoreContext>();
@@ -40,7 +49,7 @@ namespace Talabat.APIs
             try
             {
                 await _Dbcontext.Database.MigrateAsync();
-               await StoreDbcontextseeding.Seedasync(_Dbcontext);
+                await StoreDbcontextseeding.Seedasync(_Dbcontext);
             }
             catch (Exception ex)
             {
@@ -48,6 +57,9 @@ namespace Talabat.APIs
                 var logger = loggerfactory.CreateLogger<Program>();
                 logger.LogError("an Error has been occured during apply the migration");
             }
+
+            #endregion
+
 
             // Configure the HTTP request pipeline.
             #region Configure Kestrel Middlewares
