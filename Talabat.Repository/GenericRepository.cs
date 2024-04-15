@@ -33,7 +33,11 @@ namespace Talabat.Repository
 
         public async Task<T?> GetByIdAsync(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            if (typeof(T) == typeof(Product))
+             return await _context.Set<Product>().Where(p=> p.Id == id).Include(b => b.Brand).Include(c => c.Category).FirstAsync() as T;
+
+            
+          return await _context.Set<T>().Where(p => p.Id == id).FirstAsync();
         }
     }
 }
