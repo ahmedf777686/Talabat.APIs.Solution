@@ -10,7 +10,7 @@ namespace Talabat.Repository.Data
 {
     public static   class StoreDbcontextseeding
     {
-
+        // data seeding
         public async static  Task Seedasync(StoreContext context)
         {
 
