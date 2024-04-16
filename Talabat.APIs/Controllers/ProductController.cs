@@ -6,7 +6,7 @@ using Talabat.Core.Repositories;
 namespace Talabat.APIs.Controllers
 {
     
-    public class ProductController : BaseApiController
+    public class ProductController : BaseApiController 
     {   
         private readonly IGenericRepository<Product> _productRepo;
 
