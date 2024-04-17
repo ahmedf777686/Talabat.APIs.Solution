@@ -33,7 +33,7 @@ namespace Talabat.APIs.Controllers
         public async Task<ActionResult<Product>> GetproductByid(int id)
         {
 
-            ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(p =>p.Id == id);
+            ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(id);
 
             var Product = await _productRepo.GetByIdWithSpecAsync(productWithSpc);
 
