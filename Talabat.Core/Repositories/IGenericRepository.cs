@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
+using Talabat.Core.Specifications;
 
 namespace Talabat.Core.Repositories
 {
@@ -12,9 +13,18 @@ namespace Talabat.Core.Repositories
         // Get All
       public  Task<IEnumerable<T>> GetAllAsync(); 
 
-
+            
 
         // Get By Id
        public Task<T?> GetByIdAsync(int id);
+
+
+
+        public Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecifications<T> specifications);
+
+
+
+        // Get By Id
+        public Task<T?> GetByIdWithSpecAsync(ISpecifications<T> specifications);
     }
 }
