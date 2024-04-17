@@ -18,40 +18,48 @@ namespace Talabat.Repository
         public GenericRepository(StoreContext context)
         {
             _context = context;
-        }
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            if(typeof(T) == typeof(Product))
-            {
-                  return (IEnumerable<T>) await  _context.Set<Product>().Include(b => b.Brand).Include(c => c.Category).ToListAsync();
-            }
-            else
-            {
-                return await _context.Set<T>().ToListAsync();
-            }
           
         }
 
-    
+
+        #region  WithOut Specifications Design Pattern
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            //if(typeof(T) == typeof(Product))
+            //{
+            //      return (IEnumerable<T>) await  _context.Set<Product>().Include(b => b.Brand).Include(c => c.Category).ToListAsync();
+            //}
+
+
+            return await _context.Set<T>().ToListAsync();
+
+
+        }
+
+
 
         public async Task<T?> GetByIdAsync(int id)
         {
-            if (typeof(T) == typeof(Product))
-             return await _context.Set<Product>().Where(p=> p.Id == id).Include(b => b.Brand).Include(c => c.Category).FirstAsync() as T;
+            //if (typeof(T) == typeof(Product))
+            // return await _context.Set<Product>().Where(p=> p.Id == id).Include(b => b.Brand).Include(c => c.Category).FirstAsync() as T;
 
-            
-          return await _context.Set<T>().Where(p => p.Id == id).FirstAsync();
+
+            return await _context.Set<T>().Where(p => p.Id == id).FirstAsync();
         }
 
+        #endregion
 
 
+        #region With Specifications Design Pattern
         public async Task<T?> GetByIdWithSpecAsync(ISpecifications<T> specifications)
         {
-            return  await SpecificationEvaluator<T>.GetQuery(_context.Set<T>(), specifications).FirstOrDefaultAsync();
+            return await SpecificationEvaluator<T>.GetQuery(_context.Set<T>(), specifications).FirstOrDefaultAsync();
         }
-        public async  Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecifications<T> specifications)
+
+        public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecifications<T> specifications)
         {
             return await SpecificationEvaluator<T>.GetQuery(_context.Set<T>(), specifications).ToListAsync();
-        }
+        } 
+        #endregion
     }
 }

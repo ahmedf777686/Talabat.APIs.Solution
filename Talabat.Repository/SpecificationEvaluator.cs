@@ -18,8 +18,9 @@ namespace Talabat.Repository
 
             if(specifications.Criterai != null)
             {
-                Query = Query.Where(specifications.Criterai);
+                Query = Query.Where(specifications.Criterai); // where
             }
+         
 
             Query = specifications.Include.Aggregate(Query, (CurrentQuery, IncludeInput) => CurrentQuery.Include(IncludeInput));
             return Query;
