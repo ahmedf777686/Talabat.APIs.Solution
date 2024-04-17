@@ -11,21 +11,23 @@ namespace Talabat.Core.Specifications.ProductSpecification
     public class ProductWithBrandAndCategorySpecification:Basespecification<Product>
     {
 
-        public ProductWithBrandAndCategorySpecification():base()
+        public ProductWithBrandAndCategorySpecification()
+            :base()
         {
-            Include();
+            AddInclude();
         }
 
       
 
-        public ProductWithBrandAndCategorySpecification(int id):base(p => p.Id == id)
+        public ProductWithBrandAndCategorySpecification(int id)
+            :base(p => p.Id == id)
         {
 
 
-            Include();
+            AddInclude();
         }
 
-        private void Include()
+        private void AddInclude()
         {
             base.Include.Add(p => p.Brand);
             base.Include.Add(p => p.Category);
