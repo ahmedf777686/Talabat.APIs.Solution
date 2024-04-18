@@ -33,10 +33,14 @@ namespace Talabat.APIs
                 Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionStrings"));
             });
 
-            //builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
-            //builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepository<ProductBrand>>();
-            //builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
-            //// 
+
+
+           ///builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
+           ///builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepository<ProductBrand>>();
+           ///builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
+            
+
+
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
          
 
