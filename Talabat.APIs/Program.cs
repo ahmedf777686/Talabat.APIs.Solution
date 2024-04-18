@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Talabat.APIs.Profiles;
+using Talabat.APIs.Helpers;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositories;
 using Talabat.Repository;
@@ -41,7 +41,7 @@ namespace Talabat.APIs
          
 
 
-            builder.Services.AddAutoMapper(M => M.AddProfile(new Mappingprofiles()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new Mappingprofiles(builder.Configuration)));
 
             #endregion
 
@@ -79,7 +79,7 @@ namespace Talabat.APIs
 
             app.UseAuthorization();
 
-
+            app.UseStaticFiles();
             app.MapControllers();
             #endregion
 
