@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Talabat.APIs.Dtos;
+using Talabat.APIs.Errors;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositories;
 using Talabat.Core.Specifications;
@@ -41,10 +42,12 @@ namespace Talabat.APIs.Controllers
             ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(id);
 
             var Product = await _productRepo.GetByIdWithSpecAsync(productWithSpc);
-            var res = _Mapper.Map<Product, ProductToReturn>(Product);
+            var res= _Mapper.Map<Product, ProductToReturn>(Product);
+        
+           
             if(Product is null)
             {
-                return NotFound(new {Message = "NotFound" });
+                return NotFound(new ApiResponse(404));
             }
             else
             {

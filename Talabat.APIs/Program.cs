@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Talabat.APIs.Errors;
 using Talabat.APIs.Helpers;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositories;
@@ -35,17 +37,36 @@ namespace Talabat.APIs
 
 
 
-           ///builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
-           ///builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepository<ProductBrand>>();
-           ///builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
-            
+            ///builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
+            ///builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepository<ProductBrand>>();
+            ///builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
+
 
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-         
+
 
 
             builder.Services.AddAutoMapper(M => M.AddProfile(new Mappingprofiles(builder.Configuration)));
+            builder.Services.Configure<ApiBehaviorOptions>(option =>
+            {
+
+                option.InvalidModelStateResponseFactory = Actioncontext =>
+                {
+
+                    var Error = Actioncontext.ModelState.Where(e => e.Value.Errors.Count > 0)
+                    .SelectMany(p => p.Value.Errors).Select(e => e.ErrorMessage).ToList();
+
+                    var response = new ErrorValidation()
+                    {
+                        Errors = Error
+                    };
+                    return new BadRequestObjectResult(response);
+                };
+
+
+
+            });
 
             #endregion
 
