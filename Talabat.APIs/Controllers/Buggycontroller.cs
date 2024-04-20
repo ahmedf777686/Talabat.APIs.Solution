@@ -18,7 +18,7 @@ namespace Talabat.APIs.Controllers
 
 
         [HttpGet("NotFound")]
-        public ActionResult Getnotfound()
+        public ActionResult Getnotfound() 
         {
             var products = _context.Set<Product>().Find(100);
             if (products == null)
