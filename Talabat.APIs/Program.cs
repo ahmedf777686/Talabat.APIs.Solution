@@ -56,7 +56,7 @@ namespace Talabat.APIs
 
                     var Error = Actioncontext.ModelState.Where(e => e.Value.Errors.Count > 0)
                     .SelectMany(p => p.Value.Errors).Select(e => e.ErrorMessage).ToList();
-
+                     
                     var response = new ErrorValidation()
                     {
                         Errors = Error
