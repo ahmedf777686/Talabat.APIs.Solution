@@ -48,7 +48,7 @@ namespace Talabat.APIs
 
 
             builder.Services.AddAutoMapper(M => M.AddProfile(new Mappingprofiles(builder.Configuration)));
-            builder.Services.Configure<ApiBehaviorOptions>(option =>
+            builder.Services.Configure<ApiBehaviorOptions>(option => 
             {
 
                 option.InvalidModelStateResponseFactory = Actioncontext =>
