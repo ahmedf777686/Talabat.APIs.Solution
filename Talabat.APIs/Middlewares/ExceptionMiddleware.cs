@@ -32,7 +32,7 @@ namespace Talabat.APIs.Middlewares
             catch (Exception Ex) 
             {
 
-                _Logger.LogError(Ex.Message);
+                _Logger.LogError(Ex.Message); 
 
                 context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "Application/json";
