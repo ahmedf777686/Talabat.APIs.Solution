@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Helpers;
+using Talabat.APIs.Middlewares;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositories;
 using Talabat.Repository;
@@ -48,6 +49,8 @@ namespace Talabat.APIs
 
 
             builder.Services.AddAutoMapper(M => M.AddProfile(new Mappingprofiles(builder.Configuration)));
+
+            // ErrorValidation Handling
             builder.Services.Configure<ApiBehaviorOptions>(option => 
             {
 
@@ -94,6 +97,8 @@ namespace Talabat.APIs
 
             // Configure the HTTP request pipeline.
             #region Configure Kestrel Middlewares
+
+            app.UseMiddleware<ExceptionMiddleware>(); 
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
