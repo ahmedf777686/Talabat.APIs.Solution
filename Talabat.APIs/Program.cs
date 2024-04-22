@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Talabat.APIs.Errors;
+using Talabat.APIs.Extensions;
 using Talabat.APIs.Helpers;
 using Talabat.APIs.Middlewares;
 using Talabat.Core.Entities;
@@ -19,15 +20,13 @@ namespace Talabat.APIs
             // Add services to the container.
 
             #region Configure Services
-            builder.Services.AddControllers();
 
 
 
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.SwaggerServicesExtension();
 
 
             // OnConfiguring
@@ -42,34 +41,12 @@ namespace Talabat.APIs
             ///builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepository<ProductBrand>>();
             ///builder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
 
-
-
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-
-
             builder.Services.AddAutoMapper(M => M.AddProfile(new Mappingprofiles(builder.Configuration)));
 
-            // ErrorValidation Handling
-            builder.Services.Configure<ApiBehaviorOptions>(option => 
-            {
+            //ApplicationExtensionServices.AddApplicationServices(builder.Services);
 
-                option.InvalidModelStateResponseFactory = Actioncontext =>
-                {
+            builder.Services.AddApplicationServices();
 
-                    var Error = Actioncontext.ModelState.Where(e => e.Value.Errors.Count > 0)
-                    .SelectMany(p => p.Value.Errors).Select(e => e.ErrorMessage).ToList();
-                     
-                    var response = new ErrorValidation()
-                    {
-                        Errors = Error
-                    };
-                    return new BadRequestObjectResult(response);
-                };
-
-
-
-            });
 
             #endregion
 

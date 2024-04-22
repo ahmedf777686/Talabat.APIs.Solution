@@ -35,6 +35,9 @@ namespace Talabat.APIs.Controllers
         }
 
 
+        [ProducesResponseType(typeof(ProductToReturn),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductToReturn>> GetproductByid(int id)
         {
