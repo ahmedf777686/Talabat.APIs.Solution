@@ -12,6 +12,9 @@ namespace Talabat.Core.Specifications
     {
         public Expression<Func<T, bool>> Criterai { get; set; } = null!; // Where(p=> p.Id == id)
         public List<Expression<Func<T, object>>> Include { get ; set ; }   = new List<Expression<Func<T, object>>>(); // Include(b => b.Brand).Include(c => c.Category)
+        public Expression<Func<T, object>> OrderBy { get ; set  ; }
+        public Expression<Func<T, object>> OrderByDesc { get ; set ; }
+
 
         // using Get all
         public Basespecification()
@@ -25,6 +28,18 @@ namespace Talabat.Core.Specifications
             Criterai = ExpressionCriterai;
             
 
+        }
+
+
+
+        public void AddOrderBy(Expression<Func<T, object>>  OrderByexpression)
+        {
+            OrderBy = OrderByexpression;
+        }
+
+        public void AddAddOrderByDesc(Expression<Func<T, object>> OrderByDescexpression)
+        {
+            OrderByDesc = OrderByDescexpression;
         }
     }
 }

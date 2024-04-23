@@ -37,9 +37,9 @@ namespace Talabat.APIs.Controllers
 
         // [baseUrl/Api/product] + Get
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductToReturn>>> GetAllProduct()
+        public async Task<ActionResult<IEnumerable<ProductToReturn>>> GetAllProduct(string sort)
         {
-            ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification();
+            ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(sort);
 
              var Result = await _productRepo.GetAllWithSpecAsync(productWithSpc);
          var ProductToReturn =   _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturn>>(Result);
@@ -49,6 +49,8 @@ namespace Talabat.APIs.Controllers
 
         [ProducesResponseType(typeof(ProductToReturn),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
+
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductToReturn>> GetproductByid(int id)

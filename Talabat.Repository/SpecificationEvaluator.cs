@@ -20,6 +20,15 @@ namespace Talabat.Repository
             {
                 Query = Query.Where(specifications.Criterai); // where
             }
+
+            if(specifications.OrderBy is not null)
+            {
+                Query = Query.OrderBy(specifications.OrderBy);
+            }
+            if(specifications.OrderByDesc is not null)
+            {
+                Query = Query.OrderByDescending(specifications.OrderByDesc);
+            }
          
 
             Query = specifications.Include.Aggregate(Query, (CurrentQuery, IncludeInput) => CurrentQuery.Include(IncludeInput));
