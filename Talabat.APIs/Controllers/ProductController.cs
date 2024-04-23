@@ -37,9 +37,9 @@ namespace Talabat.APIs.Controllers
 
         // [baseUrl/Api/product] + Get
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductToReturn>>> GetAllProduct(string sort)
+        public async Task<ActionResult<IEnumerable<ProductToReturn>>> GetAllProduct(string? sort, int? BrandId , int? CategoryId )
         {
-            ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(sort);
+            ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(sort, BrandId, CategoryId);
 
              var Result = await _productRepo.GetAllWithSpecAsync(productWithSpc);
          var ProductToReturn =   _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturn>>(Result);
