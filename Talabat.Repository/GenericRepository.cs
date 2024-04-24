@@ -60,7 +60,12 @@ namespace Talabat.Repository
         public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecifications<T> specifications)
         {
             return await SpecificationEvaluator<T>.GetQuery(_context.Set<T>(), specifications).ToListAsync();
-        } 
+        }
+
+        public async Task<int> GetProductWithSpecCount(ISpecifications<T> specifications)
+        {
+            return await SpecificationEvaluator<T>.GetQuery(_context.Set<T>(), specifications).CountAsync();
+        }
         #endregion
     }
 }

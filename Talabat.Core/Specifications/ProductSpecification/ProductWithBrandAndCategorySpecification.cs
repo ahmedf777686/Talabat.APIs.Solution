@@ -11,14 +11,14 @@ namespace Talabat.Core.Specifications.ProductSpecification
     public class ProductWithBrandAndCategorySpecification:Basespecification<Product>
     {
 
-        public ProductWithBrandAndCategorySpecification(string? sort, int? BrandId, int? CategoryId)
-            : base( e => (!BrandId.HasValue || e.BrandId == BrandId) && (!CategoryId.HasValue ||e.CategoryId == CategoryId))
+        public ProductWithBrandAndCategorySpecification(ProductspecParams Params)
+            : base( e =>(string.IsNullOrEmpty(Params.Search) || e.Name.ToLower().Contains(Params.Search))&& (!Params.BrandId.HasValue || e.BrandId == Params.BrandId) && (!Params.CategoryId.HasValue ||e.CategoryId == Params.CategoryId))
         {
             AddInclude();
 
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(Params.sort))
             {
-                switch (sort)
+                switch (Params.sort)
                 {
 
                     case "priceAsc":
@@ -33,6 +33,14 @@ namespace Talabat.Core.Specifications.ProductSpecification
                         break;
                 }
             }
+
+            // product = 100
+            // page size =10
+            // page index = 1
+                                               // 10 * 1-1
+            ApplyPagination(Params.PageSize *(Params.PageIndex -1), Params.PageSize);
+        
+        
         }
 
       

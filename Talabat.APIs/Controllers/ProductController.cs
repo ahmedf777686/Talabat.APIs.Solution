@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Talabat.APIs.Dtos;
 using Talabat.APIs.Errors;
+using Talabat.APIs.Helpers;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositories;
 using Talabat.Core.Specifications;
@@ -10,9 +11,9 @@ using Talabat.Core.Specifications.ProductSpecification;
 
 namespace Talabat.APIs.Controllers
 {
-    
-    public class ProductController : BaseApiController 
-    {   
+
+    public class ProductController : BaseApiController
+    {
         private readonly IGenericRepository<Product> _productRepo;
         private readonly IGenericRepository<ProductCategory> _categoryRepo;
 
@@ -21,77 +22,90 @@ namespace Talabat.APIs.Controllers
 
         public ProductController(IGenericRepository<Product> productRepo,
 
-            
+
             IMapper mapper
-            ,IGenericRepository<ProductBrand> BrandRepo
+            , IGenericRepository<ProductBrand> BrandRepo
             , IGenericRepository<ProductCategory> CategoryRepo
 
-            ) 
+            )
         {
             _productRepo = productRepo;
             _Mapper = mapper;
-           _BrandRepo = BrandRepo;
+            _BrandRepo = BrandRepo;
             _categoryRepo = CategoryRepo;
         }
 
 
         // [baseUrl/Api/product] + Get
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductToReturn>>> GetAllProduct(string? sort, int? BrandId , int? CategoryId )
+        public async Task<ActionResult<IEnumerable<Pagination<ProductToReturn>>>> GetAllProduct([FromQuery] ProductspecParams Params)
         {
-            ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(sort, BrandId, CategoryId);
+            ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(Params);
 
-             var Result = await _productRepo.GetAllWithSpecAsync(productWithSpc);
-         var ProductToReturn =   _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturn>>(Result);
-            return Ok(ProductToReturn);
-        }
+            var Result = await _productRepo.GetAllWithSpecAsync(productWithSpc);
+            var ProductToReturn = _Mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturn>>(Result);
 
+            var CountSpec = new productCountSpec(Params);
+            
+            int Count = await _productRepo.GetProductWithSpecCount(CountSpec);
 
-        [ProducesResponseType(typeof(ProductToReturn),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
-
-
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProductToReturn>> GetproductByid(int id)
-        {
-
-            ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(id);
-
-            var Product = await _productRepo.GetByIdWithSpecAsync(productWithSpc);
-            var res= _Mapper.Map<Product, ProductToReturn>(Product);
+            var Res = new Pagination<ProductToReturn>()
+            {
+                PageIndex = Params.PageIndex,
+                PageSize = Params.PageSize,
+                Date = ProductToReturn,
+                Count = Count,
+            };
         
-           
-            if(Product is null)
-            {
-                return NotFound(new ApiResponse(404));
-            }
-            else
-            {
-                return Ok(res);
-            }
-           
-        }
+            return Ok(Res);
+    }
 
 
-        [HttpGet("Brand")]
-        public async Task<ActionResult<IEnumerable<ProductBrand>>> GetAllBrand()
+    [ProducesResponseType(typeof(ProductToReturn), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+
+
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ProductToReturn>> GetproductByid(int id)
+    {
+
+        ProductWithBrandAndCategorySpecification productWithSpc = new ProductWithBrandAndCategorySpecification(id);
+
+        var Product = await _productRepo.GetByIdWithSpecAsync(productWithSpc);
+        var res = _Mapper.Map<Product, ProductToReturn>(Product);
+
+
+        if (Product is null)
         {
-
-            var Brand =  await  _BrandRepo.GetAllAsync();
-            return Ok(Brand);
+            return NotFound(new ApiResponse(404));
         }
-
-
-        [HttpGet("Categories")]
-        public async Task<ActionResult<IEnumerable<ProductBrand>>> GetAllCategories()
+        else
         {
-
-            var Brand = await _categoryRepo.GetAllAsync();
-            return Ok(Brand);
+            return Ok(res);
         }
 
     }
+
+
+    [HttpGet("Brand")]
+    public async Task<ActionResult<IEnumerable<ProductBrand>>> GetAllBrand()
+    {
+
+        var Brand = await _BrandRepo.GetAllAsync();
+        return Ok(Brand);
+    }
+
+
+    [HttpGet("Categories")]
+    public async Task<ActionResult<IEnumerable<ProductBrand>>> GetAllCategories()
+    {
+
+        var Brand = await _categoryRepo.GetAllAsync();
+        return Ok(Brand);
+    }
+
+}
 
 
 }
