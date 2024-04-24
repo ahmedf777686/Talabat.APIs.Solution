@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Talabat.Core.Entities;
 
 namespace Talabat.Core.Specifications
-{
+{ 
     public interface ISpecifications<T> where T : BaseEntity    
     {
        // _context.Set<Product>().Where(p=> p.Id == id).Include(b => b.Brand).Include(c => c.Category)
