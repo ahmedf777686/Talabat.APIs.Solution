@@ -12,8 +12,8 @@ namespace Talabat.Core.Specifications
     {
        // _context.Set<Product>().Where(p=> p.Id == id).Include(b => b.Brand).Include(c => c.Category)
 
-        public Expression<Func<T,bool>> Criterai { get; set; } // p=> p.Id == id
-
+        public Expression<Func<T,bool>> Criterai { get; set; } // p=> p.Id == id 
+         
         public List< Expression<Func<T,object>>> Include { get; set; } // Include(b => b.Brand)
 
 
