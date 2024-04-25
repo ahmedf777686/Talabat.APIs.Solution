@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Extensions;
 using Talabat.APIs.Helpers;
@@ -8,7 +9,7 @@ using Talabat.Core.Entities;
 using Talabat.Core.Repositories;
 using Talabat.Repository;
 using Talabat.Repository.Data;
-  
+
 namespace Talabat.APIs
 {
     public class Program
@@ -35,7 +36,12 @@ namespace Talabat.APIs
                 Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionStrings"));
             });
 
+            builder.Services.AddSingleton<IConnectionMultiplexer>(option =>
 
+            {
+                var Connection = builder.Configuration.GetConnectionString("Redis")
+                return ConnectionMultiplexer.Connect(Connection);
+            });
 
             ///builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
             ///builder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepository<ProductBrand>>();
@@ -75,7 +81,7 @@ namespace Talabat.APIs
             // Configure the HTTP request pipeline.
             #region Configure Kestrel Middlewares
 
-            app.UseMiddleware<ExceptionMiddleware>(); 
+            app.UseMiddleware<ExceptionMiddleware>();
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
