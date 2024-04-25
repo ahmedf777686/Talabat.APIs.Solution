@@ -13,7 +13,7 @@ namespace Talabat.Core.Repositories
         public Task<CustomerBasket?> GetBasket(string id);
 
 
-        public Task<CustomerBasket> UpdateOrCreateBasket(CustomerBasket basket);
+        public Task<CustomerBasket?> UpdateOrCreateBasket(CustomerBasket basket);
 
         public Task<bool> DeleteBasket(string id);
 

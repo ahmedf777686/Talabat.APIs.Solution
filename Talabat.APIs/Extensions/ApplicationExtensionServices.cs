@@ -14,6 +14,9 @@ namespace Talabat.APIs.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 
+            services.AddSingleton(typeof(IBasketRepository), typeof(BasketRepository));
+
+
             services.AddControllers();
 
 
