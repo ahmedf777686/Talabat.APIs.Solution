@@ -2,6 +2,7 @@
 using Talabat.APIs.Dtos;
 using Talabat.APIs.Helpers;
 using Talabat.Core.Entities;
+using Talabat.Core.Entities.Basket;
 using static System.Net.WebRequestMethods;
 
 namespace Talabat.APIs.Helpers
@@ -17,6 +18,13 @@ namespace Talabat.APIs.Helpers
                 //.ForMember(d=>d.PictureUrl,o =>o.MapFrom());
 
                .ForMember(d => d.PictureUrl,o => o.MapFrom(d => $"{_Configuration["ApiBaseUrl"]}/{d.PictureUrl}"));
+
+
+
+            CreateMap<CustomerBasketDto, CustomerBasket>();
+            CreateMap<BasketItemDto, BasketItem>();
+
+
             
         }
 
