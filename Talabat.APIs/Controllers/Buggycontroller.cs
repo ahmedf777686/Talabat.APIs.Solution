@@ -1,57 +1,53 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Talabat.Core.Entities;
-using Talabat.Repository.Data;
+using Talabat.APIs.Errors;
+using Talabat.Infrastructure._Data;
 
 namespace Talabat.APIs.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class Buggycontroller : ControllerBase
-    {
-        private readonly StoreContext _context;
+	[ApiController]
+	public class BuggyController : BaseApiController
+	{
+		private readonly StoreContext _dbContext;
 
-        public Buggycontroller(StoreContext context)
-        {
-            _context = context;
-        }
+		public BuggyController(StoreContext dbContext)
+		{
+			_dbContext = dbContext;
+		}
+		[HttpGet("notfound")]
+		public ActionResult GetNotFoundRequest()
+		{
+			var product = _dbContext.Products.Find(100);
+			if (product is null )
+				return NotFound(new ApiResponse(404));
+			return Ok(product);
+		}
 
+		[HttpGet("servererror")]
+		public ActionResult GetServerError()
+		{
+			var product = _dbContext.Products.Find(100);
+			var productToReturn = product.ToString();
+			return Ok(productToReturn);
+		}
 
-        [HttpGet("NotFound")]
-        public ActionResult Getnotfound() 
-        {
-            var products = _context.Set<Product>().Find(100);
-            if (products == null)
+		[HttpGet("badrequest")]
+		public ActionResult GetBadRequest()
+		{
+			return BadRequest(new ApiResponse(400));
+		}
 
-                return NotFound();
+		[HttpGet("badrequest/{id}")]
+		public ActionResult GetBadRequest(int id)
+		{
+			return Ok();
+		}
 
-            return Ok(products);
-        }
-        //reference
-
-        [HttpGet("ServerError")]
-        public ActionResult GetReferenceErroe()
-        {
-            var products = _context.Set<Product>().Find(100);
-
-            products.ToString();
-
-            return Ok(products);
-        }
-
-
-        [HttpGet("BadRequest")]
-        public ActionResult GetBadError()
-        {
-            return BadRequest();
-        }
-
-
-        [HttpGet("BadRequest/{id}")]
-
-        public ActionResult GetvalidationError(int id)
-        {
-            return Ok();
-        }
-    }
+		[HttpGet("/unauthorized")]
+		public ActionResult GetUnauthorizedError()
+		{
+			return Unauthorized(new ApiResponse(401));
+		}
+	}
 }
